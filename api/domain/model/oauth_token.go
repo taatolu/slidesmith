@@ -33,9 +33,6 @@ func (t *OauthToken) CanWriteDrive() bool {
 
 // parseScopesはスコープ文字列を解析してスライスに変換する関数
 func parseScopes(scope string) []string {
-	if len(scope) == 0 {
-		return []string{}
-	}
 	// 文字列を空白で分割してスライスに変換(OAuth2の使用で、スコープは空白で区切られる)
 	return strings.Fields(scope)
 }
