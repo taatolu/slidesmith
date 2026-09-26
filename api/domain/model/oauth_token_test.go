@@ -49,3 +49,25 @@ func TestOauthTokenCanWriteDrive(t *testing.T) {
 		})
 	}
 }
+
+// TestParseScopesはOauthTokenのスコープ解析のテスト
+func TestParseScopes(t *testing.T) {
+	// table driven test
+	tests := []struct {
+		name     string
+		scope    string
+		expected []string
+	}{
+		{"No scope", "", []string{}},
+		{"Single scope", "https://www.googleapis.com/auth/drive.file", []string{"https://www.googleapis.com/auth/drive.file"}},
+		{"Multiple scopes", "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive", []string{"https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"}},
+		{"double space", "https://www.googleapis.com/auth/drive.file  email", []string{"https://www.googleapis.com/auth/drive.file", "email"}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert := assert.New(t)
+			assert.Equal(tt.expected, parseScopes(tt.scope))
+		})
+	}
+}
