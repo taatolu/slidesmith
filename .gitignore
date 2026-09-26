@@ -17,3 +17,6 @@ __pycache__/
 /infra/*.tfstate.*
 /infra/terraform.tfvars
 /infra/.terraform.lock.hcl
+
+# Claude
+/CLAUDE.md
