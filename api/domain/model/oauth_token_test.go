@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// OauthTokenが期限切れかどうかを判定するメソッドのテスト
+// TestOauthTokenIsExpiredはOauthTokenが期限切れかどうかを判定するメソッドのテスト
 func TestOauthTokenIsExpired(t *testing.T) {
 	// テーブル駆動テスト
 	tests := []struct {
@@ -26,4 +26,26 @@ func TestOauthTokenIsExpired(t *testing.T) {
 		})
 	}
 
+}
+
+// TestOauthTokenCanWriteDriveはOauthTokenがGoogleDriveの書き込み権限を持つかを判定するメソッドのテスト
+func TestOauthTokenCanWriteDrive(t *testing.T) {
+	//table driven test
+	tests := []struct {
+		name     string
+		token    *OauthToken
+		expected bool
+	}{
+		{"Can write drive", &OauthToken{Scopes: []string{"https://www.googleapis.com/auth/drive.file"}}, true},
+		{"Can write drive with full access", &OauthToken{Scopes: []string{"https://www.googleapis.com/auth/drive"}}, true},
+		{"Can't write drive", &OauthToken{Scopes: []string{"https://www.googleapis.com/auth/drive.readonly"}}, false},
+		{"No scopes", &OauthToken{Scopes: []string{}}, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert := assert.New(t)
+			assert.Equal(tt.expected, tt.token.CanWriteDrive())
+		})
+	}
 }
