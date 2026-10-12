@@ -3,8 +3,9 @@ package model
 import (
 	"errors"
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // TestDomainErrorAs は fmt.Errorf で包まれた DomainError を errors.As で取り出せるかを確認
@@ -21,5 +22,18 @@ func TestDomainErrorAs(t *testing.T) {
 		assert.True(ok)
 		assert.Equal(ErrCodeUnauthenticated, got.Code)
 		assert.Equal("期限切れ", got.Message)
+	})
+}
+
+// TestDomainErrorIs は DomainError が内包するエラーを errors.Is で判定できるかを確認
+func TestDomainErrorIs(t *testing.T) {
+	t.Run("DomainErrorの中のErrorを errors.Isで取り出せる", func(t *testing.T) {
+		assert := assert.New(t)
+		// DomainErrorに適当な値を設定してdeに格納
+		innerError := errors.New("サンプルエラー")
+		de := NewDomainError(ErrCodeUnauthenticated, "期限切れ", innerError)
+		// errors.ISでdeからinnerErrorを取り出せるか確認
+		ok := errors.Is(de, innerError)
+		assert.True(ok)
 	})
 }
