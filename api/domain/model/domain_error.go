@@ -14,7 +14,8 @@ type DomainError struct {
 	Err     error
 }
 
-// DomainErrorがerrorインターフェースを実装するようにError()メソッドを定義
+// Error は DomainError が error インターフェースを満たすためのメソッドで、Message だけを返す。
+// 原因（Err）は内部情報を含みうるので混ぜない。
 func (e *DomainError) Error() string {
 	return e.Message
 }
